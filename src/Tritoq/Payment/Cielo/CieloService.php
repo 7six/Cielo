@@ -124,6 +124,22 @@ class CieloService
 
     /**
      *
+     * ID de chamada para gerar token
+     *
+     * @const integer
+     */
+    const TOKEN_ID = 6;
+
+    /**
+     *
+     * Cabeçalho XML para gerar token
+     *
+     * @const string
+     */
+    const TOKEN_HEADER = 'requisicao-token';
+
+    /**
+     *
      * Loja Credenciada a Cielo
      *
      * @var Loja
@@ -654,6 +670,41 @@ class CieloService
     }
 
     /**
+     * Chamada para gerar token apartir de cartão de crédito.
+     *
+     * @throws \Tritoq\Payment\Exception\InvalidArgumentException
+     * @return $this
+     */
+    public function doToken()
+    {
+
+        $_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+            . "<%s id='%d' versao='%s'>"
+            . "</%s>";
+
+        $_xml = sprintf(
+            $_xml,
+            self::TOKEN_HEADER,
+            self::TOKEN_ID,
+            self::VERSAO,
+            self::TOKEN_HEADER
+        );
+
+        $xml = new \SimpleXMLElement($_xml);
+
+        $this->addNodeDadosEc($xml);
+        $this->addNodeDadosPortador($xml);
+
+        // Envia a requisição a Cielo
+        $requisicao = $this->enviaRequisicao($xml);
+
+        // Atualiza informações da Transação
+        $this->updateTransacao($requisicao, Transacao::REQUISICAO_TIPO_TOKEN);
+
+        return $this;
+    }
+
+    /**
      *
      * Método que faz a requisição da captura da transação
      *
@@ -917,4 +968,4 @@ class CieloService
     {
         return $this->transacao;
     }
-} 
+}
