@@ -176,6 +176,17 @@ class Transacao
 
     /**
      *
+     * Indicador de autorização - Autorizar sem passar por autentição (usada somente para cartões de crédito)
+     *
+     *
+     * Para bandeiras: Diners, Discover, Elo, Amex, Aura e JCB será usada sempre este valor(3)
+     *
+     * @const integer
+     */
+    const AUTORIZAR_RECORRENTE = 4;
+
+    /**
+     *
      * Flag para captura automática
      *
      * @const string
@@ -614,6 +625,7 @@ class Transacao
             case self::AUTORIZAR_SOMENTE_AUTENTICADA:
             case self::AUTORIZAR_AUTENTICADA_NAO_AUTENTICADA:
             case self::AUTORIZAR_SEM_AUTENTICACAO:
+            case self::AUTORIZAR_RECORRENTE:
                 $this->_autorizar = $autorizar;
                 return $this;
             default:
@@ -729,4 +741,4 @@ class Transacao
 
         return $output;
     }
-} 
+}
