@@ -122,21 +122,21 @@ class CieloService
      */
     const CONSULTA_HEADER = 'requisicao-consulta';
 
-    /**
-     *
-     * ID de chamada para gerar token
-     *
-     * @const integer
-     */
-    const TOKEN_ID = 6;
+	/**
+	 *
+	 * ID de chamada para gerar token
+	 *
+	 * @const integer
+	 */
+	const TOKEN_ID = 6;
 
-    /**
-     *
-     * Cabeçalho XML para gerar token
-     *
-     * @const string
-     */
-    const TOKEN_HEADER = 'requisicao-token';
+	/**
+	 *
+	 * Cabeçalho XML para gerar token
+	 *
+	 * @const string
+	 */
+	const TOKEN_HEADER = 'requisicao-token';
 
     /**
      *
@@ -395,13 +395,15 @@ class CieloService
     private function addNodeDadosPortador(\SimpleXMLElement $xml)
     {
         $dp = $xml->addChild('dados-portador');
-        $dp->addChild('numero', $this->cartao->getNumero());
-        $dp->addChild('validade', $this->cartao->getValidade());
-        $dp->addChild('indicador', $this->cartao->getIndicador());
-        $dp->addChild('codigo-seguranca', $this->cartao->getCodigoSegurancaCartao());
-        $dp->addChild('nome-portador', $this->cartao->getNomePortador());
-        $dp->addChild('token', $this->transacao->getToken());
-
+		if(!empty($this->cartao->getNumero())) {
+			$dp->addChild('numero', $this->cartao->getNumero());
+			$dp->addChild('validade', $this->cartao->getValidade());
+			$dp->addChild('indicador', $this->cartao->getIndicador());
+			$dp->addChild('codigo-seguranca', $this->cartao->getCodigoSegurancaCartao());
+			$dp->addChild('nome-portador', $this->cartao->getNomePortador());
+		}else{
+			$dp->addChild('token', $this->transacao->getToken());
+		}
         return $dp;
     }
 
@@ -596,7 +598,7 @@ class CieloService
         $xml->addChild('autorizar', $this->transacao->getAutorizar());
         $xml->addChild('capturar', $this->transacao->getCapturar());
         $xml->addChild('campo-livre', $this->transacao->getCampoLivre());
-        $xml->addChild('bin', substr($this->cartao->getNumero(), 0, 6));
+        $xml->addChild('bin', substr($this->cartao->getBin(), 0, 6));
 
         // Verifica se vai ser gerado o token
 
@@ -669,40 +671,40 @@ class CieloService
         return $this;
     }
 
-    /**
-     * Chamada para gerar token apartir de cartão de crédito.
-     *
-     * @throws \Tritoq\Payment\Exception\InvalidArgumentException
-     * @return $this
-     */
-    public function doToken()
-    {
+	/**
+	 * Chamada para gerar token apartir de cartão de crédito.
+	 *
+	 * @throws \Tritoq\Payment\Exception\InvalidArgumentException
+	 * @return $this
+	 */
+	public function doToken()
+	{
 
-        $_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
-            . "<%s id='%d' versao='%s'>"
-            . "</%s>";
+		$_xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+			. "<%s id='%d' versao='%s'>"
+			. "</%s>";
 
-        $_xml = sprintf(
-            $_xml,
-            self::TOKEN_HEADER,
-            self::TOKEN_ID,
-            self::VERSAO,
-            self::TOKEN_HEADER
-        );
+		$_xml = sprintf(
+			$_xml,
+			self::TOKEN_HEADER,
+			self::TOKEN_ID,
+			self::VERSAO,
+			self::TOKEN_HEADER
+		);
 
-        $xml = new \SimpleXMLElement($_xml);
+		$xml = new \SimpleXMLElement($_xml);
 
-        $this->addNodeDadosEc($xml);
-        $this->addNodeDadosPortador($xml);
+		$this->addNodeDadosEc($xml);
+		$this->addNodeDadosPortador($xml);
 
-        // Envia a requisição a Cielo
-        $requisicao = $this->enviaRequisicao($xml);
+		// Envia a requisição a Cielo
+		$requisicao = $this->enviaRequisicao($xml);
 
-        // Atualiza informações da Transação
-        $this->updateTransacao($requisicao, Transacao::REQUISICAO_TIPO_TOKEN);
+		// Atualiza informações da Transação
+		$this->updateTransacao($requisicao, Transacao::REQUISICAO_TIPO_TOKEN);
 
-        return $this;
-    }
+		return $this;
+	}
 
     /**
      *
@@ -968,4 +970,4 @@ class CieloService
     {
         return $this->transacao;
     }
-}
+} 

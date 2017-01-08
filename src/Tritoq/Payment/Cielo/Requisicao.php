@@ -250,6 +250,8 @@ class Requisicao
             throw new ResourceNotFoundException('XML de requisição está vazio');
         }
 
+//        echo $this->xmlRequisicao->asXML();
+
         // Iniciando o objeto Curl
         $_curl = curl_init();
 
@@ -278,7 +280,7 @@ class Requisicao
         curl_setopt($_curl, CURLOPT_POST, true);
 
         // envio os campos
-        curl_setopt($_curl, CURLOPT_POSTFIELDS, "mensagem={$this->xmlRequisicao->asXML()}");
+        curl_setopt($_curl, CURLOPT_POSTFIELDS, "mensagem=".urlencode($this->xmlRequisicao->asXML()));
 
         //  o tempo em segundos de espera para obter uma conexão
         curl_setopt($_curl, CURLOPT_CONNECTTIMEOUT, 10);

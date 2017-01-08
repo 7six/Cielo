@@ -120,6 +120,14 @@ class Cartao
      */
     private $_numero;
 
+	/**
+	 *
+	 * Número do Cartão
+	 *
+	 * @var integer
+	 */
+	private $_bin;
+
     /**
      *
      * Bandeira do Cartão
@@ -228,6 +236,30 @@ class Cartao
     {
         return $this->_numero;
     }
+
+	/**
+	 *
+	 * Seta o bin do Cartão
+	 *
+	 * @param int $bin
+	 * @return $this
+	 */
+	public function setBin($bin)
+	{
+		$this->_bin = preg_replace('/[^[:digit:]]/', '', $bin);
+		return $this;
+	}
+
+	/**
+	 *
+	 * Retorna o bin do Cartão
+	 *
+	 * @return int
+	 */
+	public function getBin()
+	{
+		return $this->_bin;
+	}
 
 
     /**

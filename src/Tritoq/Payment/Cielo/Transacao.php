@@ -204,13 +204,13 @@ class Transacao
      * @const string
      */
     const REQUISICAO_TIPO_TRANSACAO = 'transacao';
-    /**
-     *
-     * Requisição tipo Token
-     *
-     * @const string
-     */
-    const REQUISICAO_TIPO_TOKEN = 'token';
+	/**
+	 *
+	 * Requisição tipo Token
+	 *
+	 * @const string
+	 */
+	const REQUISICAO_TIPO_TOKEN = 'token';
     /**
      *
      * Requisição tipo Captura
@@ -393,8 +393,8 @@ class Transacao
                 case self::REQUISICAO_TIPO_CAPTURA:
                 case self::REQUISICAO_TIPO_TRANSACAO:
                 case self::REQUISICAO_TIPO_CONSULTA:
-                case self::REQUISICAO_TIPO_TOKEN:
-                return $this->_requisicoes[$type];
+				case self::REQUISICAO_TIPO_TOKEN:
+				return $this->_requisicoes[$type];
                 default:
                     throw new InvalidArgumentException('Tipo de requisiçao inválida');
             }
