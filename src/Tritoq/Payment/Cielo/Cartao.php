@@ -357,10 +357,20 @@ class Cartao
      */
     public function setCodigoSegurancaCartao($codigoSegurancaCartao)
     {
-        $this->_codigoSegurancaCartao = preg_replace('/[^[:digit:]]/', '', $codigoSegurancaCartao);
+       /* $this->_codigoSegurancaCartao = preg_replace('/[^[:digit:]]/', '', $codigoSegurancaCartao);
 
         if (preg_match('/([[:alpha:]]|[[:punct:]]|[[:space:]])/', $codigoSegurancaCartao) || (strlen($codigoSegurancaCartao) < 3) || (strlen($codigoSegurancaCartao) > 4)) {
             throw new InvalidArgumentException('Código de segurança inválido.');
+        } else {
+            $this->_codigoSeguranca = $codigoSegurancaCartao;
+            $this->setIndicador(1);
+            return $this;
+        }*/
+
+        if(empty($codigoSegurancaCartao)){
+            $this->_codigoSeguranca = null;
+            $this->setIndicador(0);
+            return $this;
         } else {
             $this->_codigoSeguranca = $codigoSegurancaCartao;
             $this->setIndicador(1);
